@@ -3,10 +3,11 @@ using System.Linq;
 using Firing;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityStandardAssets.CrossPlatformInput;
 
 namespace UnityStandardAssets._2D
 {
-    public class PlatformerCharacter2D : MonoBehaviour, IPointerClickHandler
+    public class PlatformerCharacter2D : MonoBehaviour
     {
         [SerializeField] private float m_MaxSpeed = 10f;                    // The fastest the player can travel in the x axis.
         [SerializeField] private float m_JumpForce = 400f;                  // Amount of force added when the player jumps.
@@ -36,6 +37,9 @@ namespace UnityStandardAssets._2D
             arrows = new List<ArrowController>();
         }
 
+        private void Update()
+        {
+        }
 
         private void FixedUpdate()
         {
@@ -148,18 +152,18 @@ namespace UnityStandardAssets._2D
             }
         }
 
-        private void Fire(Vector3 direction)
+        public void Fire()
         {
             if (arrows.Any())
             {
+                Vector3 direction = CrossPlatformInputManager.mousePosition;
+                    //new Vector3(CrossPlatformInputManager.GetAxis("Horizontal"), 
+                    //CrossPlatformInputManager.GetAxis("Vertical"), 0f);
+
+                Debug.Log("Firing in direction: " + direction);
                 arrows.First().Fire(transform.position, direction);
                 arrows.RemoveAt(0);
             }
-        }
-
-        public void OnPointerClick(PointerEventData eventData)
-        {
-            Fire(eventData.pointerCurrentRaycast.worldPosition);
         }
     }
 }
