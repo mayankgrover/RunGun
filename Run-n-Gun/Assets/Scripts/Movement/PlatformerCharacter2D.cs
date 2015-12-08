@@ -160,7 +160,7 @@ namespace UnityStandardAssets._2D
                     //new Vector3(CrossPlatformInputManager.GetAxis("Horizontal"), 
                     //CrossPlatformInputManager.GetAxis("Vertical"), 0f);
 
-                Debug.Log("Firing in direction: " + direction + " from: " + transform.position);
+                //Debug.Log("Firing in direction: " + direction + " from: " + transform.position);
                 arrows.First().Fire(transform.position, direction);
                 arrows.RemoveAt(0);
             }
