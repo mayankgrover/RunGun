@@ -25,6 +25,7 @@ namespace Firing
             {
                 IsLive = false;
                 rigidbody2D.velocity = Vector2.zero;
+                rigidbody2D.isKinematic = true;
             }
         }
 
@@ -39,6 +40,7 @@ namespace Firing
             JustShot = true;
             IsLive = true;
             transform.position = startPosition;
+            rigidbody2D.isKinematic = false;
             gameObject.SetActive(true);
 
             Vector3 direction = targetDirection - startPosition;
