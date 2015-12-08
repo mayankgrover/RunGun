@@ -4,7 +4,6 @@ using UnityStandardAssets._2D;
 
 public class MainMenu : MonoBehaviour
 {
-
     public Button PlayBots;
     public Button PlayYouself;
 
@@ -23,7 +22,8 @@ public class MainMenu : MonoBehaviour
 
     private void StartGame()
     {
-        Application.LoadLevel("2dCharacter");
+        //Application.LoadLevel("2dCharacter");
+        Application.LoadLevel("2D Art scene");
     }
 
     private void OnPlayYourself()

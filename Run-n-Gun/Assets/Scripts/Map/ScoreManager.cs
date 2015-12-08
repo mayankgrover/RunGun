@@ -5,11 +5,18 @@ using UnityStandardAssets._2D;
 public class ScoreManager : MonoBehaviour
 {
     public PlatformerCharacter2D myPlayer;
-    private Text score;
+    public Text arrowsLeft, kills;
+
+    public static ScoreManager Instance;
 
     void Awake()
     {
-        score = GetComponent<Text>();
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+        }
+
+        Instance = this;
     }
 	
 	// Update is called once per frame
@@ -19,6 +26,12 @@ public class ScoreManager : MonoBehaviour
 
     public void UpdateScore()
     {
-        score.text = "Arrows: " + myPlayer.ArrowCount;
+        arrowsLeft.text = "Arrows: " + myPlayer.ArrowCount;
+    }
+
+    public void IncrementKills()
+    {
+        myPlayer.IncrementKills();
+        kills.text = "Kills: " + myPlayer.KillCount;
     }
 }

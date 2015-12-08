@@ -24,7 +24,7 @@ namespace UnityStandardAssets._2D
 
         private Transform m_GroundCheck;    // A position marking where to check if the player is grounded.
         const float k_GroundedRadius = .2f; // Radius of the overlap circle to determine if grounded
-        private bool m_Grounded;            // Whether or not the player is grounded.
+        public bool m_Grounded;            // Whether or not the player is grounded.
         private Transform m_CeilingCheck;   // A position marking where to check for ceilings
         const float k_CeilingRadius = .01f; // Radius of the overlap circle to determine if the player can stand up
         private Animator m_Anim;            // Reference to the player's animator component.
@@ -32,13 +32,18 @@ namespace UnityStandardAssets._2D
         private bool m_FacingRight = true;  // For determining which way the player is currently facing.
 
         private List<ArrowController> arrows;
+
         public int ArrowCount { get { return arrows.Count(); } }
+        public string KillCount { get; private set; }
 
         public PlayerType playerType;
 
+        public float m_GroundMinX { get; private set; }
+        public float m_GroundMaxX { get; private set; }
+
         private void Awake()
         {
-            if (playerType != PlayerType.MyPlayer && 
+            if (playerType == PlayerType.MyClone && 
                 (!PlayerPrefs.HasKey(playerType.ToString()) || 
                   PlayerPrefs.GetInt(playerType.ToString()) == 0))
             {
@@ -64,7 +69,13 @@ namespace UnityStandardAssets._2D
             for (int i = 0; i < colliders.Length; i++)
             {
                 if (colliders[i].gameObject != gameObject)
+                {
+                    Bounds bounds = colliders[i].bounds;
                     m_Grounded = true;
+                    m_GroundMinX = bounds.min.x;
+                    m_GroundMaxX = bounds.max.x;
+                    //Debug.LogError("X1: " + m_GroundMinX + "X2: " + m_GroundMaxX);
+                }
             }
             m_Anim.SetBool("Ground", m_Grounded);
 
@@ -77,14 +88,19 @@ namespace UnityStandardAssets._2D
             if (collision.gameObject.tag == "Arrows")
             {
                 ArrowController controller = collision.gameObject.GetComponent<ArrowController>();
-                if (controller.IsLive) {
-                    Debug.LogError("Character dead!");
+                if (controller.IsLive && !WasJustFiredByMe(controller)) {
+                    Debug.LogError("Character dead! " + gameObject.name);
                     KillPlayer(controller);
                 } else if(!controller.JustShot) {
-                    Debug.Log("Pick up weapon");
+                    Debug.Log("Pick up a arrow");
                     PickUp(controller);
                 }
             }
+        }
+
+        private bool WasJustFiredByMe(ArrowController controller)
+        {
+            return controller.LastFiredBy == playerType && controller.JustShot;
         }
 
         public void Move(float move, bool crouch, bool jump)
@@ -159,10 +175,16 @@ namespace UnityStandardAssets._2D
 
         private void KillPlayer(ArrowController controller)
         {
-            if (controller != null)
-            {
-                // TODO 
+            if (playerType == PlayerType.MyPlayer) {
+                Application.LoadLevel("UIScreen");
             }
+            else if (controller != null) {
+                if (controller.LastFiredBy == PlayerType.MyPlayer) {
+                    ScoreManager.Instance.IncrementKills();
+                }
+            }
+
+            Destroy(gameObject);
         }
 
         public void Fire()
@@ -174,9 +196,14 @@ namespace UnityStandardAssets._2D
                     //CrossPlatformInputManager.GetAxis("Vertical"), 0f);
 
                 //Debug.Log("Firing in direction: " + direction + " from: " + transform.position);
-                arrows.First().Fire(transform.position, direction);
+                arrows.First().Fire(playerType, transform.position, direction);
                 arrows.RemoveAt(0);
             }
+        }
+
+        public void IncrementKills()
+        {
+            KillCount = KillCount + 1;
         }
     }
 }
