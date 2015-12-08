@@ -48,7 +48,10 @@ namespace Firing
             JustShot = true;
             transform.position = startPosition;
             gameObject.SetActive(true);
-            rigidbody2D.AddForce((targetDirection - startPosition) * arrowSpeed, ForceMode2D.Impulse);
+
+            Vector3 direction = targetDirection - startPosition;
+            Debug.Log("Firing Dir: " + direction + " Normalized: " + direction.normalized);
+            rigidbody2D.AddForce(direction.normalized * arrowSpeed, ForceMode2D.Impulse);
             StartCoroutine(MakeArrowLive());
         }
 

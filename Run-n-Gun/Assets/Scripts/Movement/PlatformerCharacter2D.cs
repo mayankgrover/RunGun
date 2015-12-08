@@ -25,6 +25,7 @@ namespace UnityStandardAssets._2D
         private bool m_FacingRight = true;  // For determining which way the player is currently facing.
 
         private List<ArrowController> arrows;
+        public int ArrowCount { get { return arrows.Count(); } }
 
         private void Awake()
         {
@@ -160,7 +161,7 @@ namespace UnityStandardAssets._2D
                     //new Vector3(CrossPlatformInputManager.GetAxis("Horizontal"), 
                     //CrossPlatformInputManager.GetAxis("Vertical"), 0f);
 
-                Debug.Log("Firing in direction: " + direction + " from: " + transform.position);
+                //Debug.Log("Firing in direction: " + direction + " from: " + transform.position);
                 arrows.First().Fire(transform.position, direction);
                 arrows.RemoveAt(0);
             }

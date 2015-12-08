@@ -103,6 +103,7 @@
     <Compile Include="Assets\SampleScenes\Scripts\PlaceTargetWithMouse.cs" />
     <Compile Include="Assets\SampleScenes\Scripts\SlowMoButton.cs" />
     <Compile Include="Assets\Scripts\Firing\ArrowController.cs" />
+    <Compile Include="Assets\Scripts\Map\ScoreManager.cs" />
     <Compile Include="Assets\Scripts\Movement\PlatformerCharacter2D.cs" />
     <Compile Include="Assets\Scripts\Movement\PlayerMovement.cs" />
     <Compile Include="Assets\Scripts\StandardAssets\Camera2DFollow.cs" />
