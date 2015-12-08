@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 namespace Firing
 {
@@ -6,6 +7,7 @@ namespace Firing
     {
         private new Rigidbody2D rigidbody2D;
         public bool IsLive { get; private set; }
+        public bool JustShot { get; private set; }
 
         public float arrowSpeed;
 
@@ -43,10 +45,18 @@ namespace Firing
 
         public void Fire(Vector3 startPosition, Vector3 targetDirection)
         {
-            IsLive = true;
+            JustShot = true;
             transform.position = startPosition;
             gameObject.SetActive(true);
-            rigidbody2D.AddForce(targetDirection * arrowSpeed, ForceMode2D.Impulse);
+            rigidbody2D.AddForce((targetDirection - startPosition) * arrowSpeed, ForceMode2D.Impulse);
+            StartCoroutine(MakeArrowLive());
+        }
+
+        private IEnumerator MakeArrowLive()
+        {
+            yield return new WaitForSeconds(0.1f);
+            IsLive = true;
+            JustShot = false;
         }
     }
 }

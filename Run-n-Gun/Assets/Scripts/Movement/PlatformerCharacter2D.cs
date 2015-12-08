@@ -67,7 +67,7 @@ namespace UnityStandardAssets._2D
                 if (controller.IsLive) {
                     Debug.LogError("Character dead!");
                     KillPlayer(controller);
-                } else {
+                } else if(!controller.JustShot) {
                     Debug.Log("Pick up weapon");
                     PickUp(controller);
                 }
@@ -154,13 +154,13 @@ namespace UnityStandardAssets._2D
 
         public void Fire()
         {
-            if (arrows.Any())
-            {
-                Vector3 direction = CrossPlatformInputManager.mousePosition;
+            if (arrows.Any()) {
+
+                Vector3 direction = Camera.main.ScreenToWorldPoint(CrossPlatformInputManager.mousePosition);
                     //new Vector3(CrossPlatformInputManager.GetAxis("Horizontal"), 
                     //CrossPlatformInputManager.GetAxis("Vertical"), 0f);
 
-                Debug.Log("Firing in direction: " + direction);
+                Debug.Log("Firing in direction: " + direction + " from: " + transform.position);
                 arrows.First().Fire(transform.position, direction);
                 arrows.RemoveAt(0);
             }
