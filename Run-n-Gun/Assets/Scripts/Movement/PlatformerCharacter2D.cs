@@ -25,6 +25,7 @@ namespace UnityStandardAssets._2D
         private bool m_FacingRight = true;  // For determining which way the player is currently facing.
 
         private List<ArrowController> arrows;
+        public int ArrowCount { get { return arrows.Count(); } }
 
         private void Awake()
         {
