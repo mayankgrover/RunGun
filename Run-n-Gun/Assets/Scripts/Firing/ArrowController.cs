@@ -17,18 +17,6 @@ namespace Firing
             IsLive = false;
         }
 
-        // Use this for initialization
-        private void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        private void Update()
-        {
-
-        }
-
         private void OnCollisionEnter2D(Collision2D collision)
         {
             if (collision.transform.parent != null && collision.transform.parent.tag == "Platform")

@@ -7,6 +7,13 @@ using UnityStandardAssets.CrossPlatformInput;
 
 namespace UnityStandardAssets._2D
 {
+    public enum PlayerType
+    {
+        MyPlayer, 
+        MyClone,
+        Bot,
+    }
+
     public class PlatformerCharacter2D : MonoBehaviour
     {
         [SerializeField] private float m_MaxSpeed = 10f;                    // The fastest the player can travel in the x axis.
@@ -27,8 +34,17 @@ namespace UnityStandardAssets._2D
         private List<ArrowController> arrows;
         public int ArrowCount { get { return arrows.Count(); } }
 
+        public PlayerType playerType;
+
         private void Awake()
         {
+            if (playerType != PlayerType.MyPlayer && 
+                (!PlayerPrefs.HasKey(playerType.ToString()) || 
+                  PlayerPrefs.GetInt(playerType.ToString()) == 0))
+            {
+                Destroy(gameObject);
+            }
+
             // Setting up references.
             m_GroundCheck = transform.Find("GroundCheck");
             m_CeilingCheck = transform.Find("CeilingCheck");
@@ -36,10 +52,6 @@ namespace UnityStandardAssets._2D
             m_Rigidbody2D = GetComponent<Rigidbody2D>();
 
             arrows = new List<ArrowController>();
-        }
-
-        private void Update()
-        {
         }
 
         private void FixedUpdate()
