@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityStandardAssets._2D;
 
 namespace Firing
 {
@@ -10,6 +11,7 @@ namespace Firing
         public bool JustShot { get; private set; }
 
         public float arrowSpeed;
+        public PlayerType LastFiredBy { get; private set; }
 
         private void Awake()
         {
@@ -31,9 +33,11 @@ namespace Firing
             gameObject.SetActive(false);
         }
 
-        public void Fire(Vector3 startPosition, Vector3 targetDirection)
+        public void Fire(PlayerType player, Vector3 startPosition, Vector3 targetDirection)
         {
+            LastFiredBy = player;
             JustShot = true;
+            IsLive = true;
             transform.position = startPosition;
             gameObject.SetActive(true);
 
@@ -46,7 +50,6 @@ namespace Firing
         private IEnumerator MakeArrowLive()
         {
             yield return new WaitForSeconds(0.1f);
-            IsLive = true;
             JustShot = false;
         }
     }

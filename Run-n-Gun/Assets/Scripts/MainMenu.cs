@@ -4,7 +4,6 @@ using UnityStandardAssets._2D;
 
 public class MainMenu : MonoBehaviour
 {
-
     public Button PlayBots;
     public Button PlayYouself;
 

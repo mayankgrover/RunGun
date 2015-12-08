@@ -32,7 +32,9 @@ namespace UnityStandardAssets._2D
         private bool m_FacingRight = true;  // For determining which way the player is currently facing.
 
         private List<ArrowController> arrows;
+
         public int ArrowCount { get { return arrows.Count(); } }
+        public string KillCount { get; private set; }
 
         public PlayerType playerType;
 
@@ -77,14 +79,19 @@ namespace UnityStandardAssets._2D
             if (collision.gameObject.tag == "Arrows")
             {
                 ArrowController controller = collision.gameObject.GetComponent<ArrowController>();
-                if (controller.IsLive) {
-                    Debug.LogError("Character dead!");
+                if (controller.IsLive && !WasJustFiredByMe(controller)) {
+                    Debug.LogError("Character dead! " + gameObject.name);
                     KillPlayer(controller);
                 } else if(!controller.JustShot) {
-                    Debug.Log("Pick up weapon");
+                    Debug.Log("Pick up a arrow");
                     PickUp(controller);
                 }
             }
+        }
+
+        private bool WasJustFiredByMe(ArrowController controller)
+        {
+            return controller.LastFiredBy == playerType && controller.JustShot;
         }
 
         public void Move(float move, bool crouch, bool jump)
@@ -159,10 +166,16 @@ namespace UnityStandardAssets._2D
 
         private void KillPlayer(ArrowController controller)
         {
-            if (controller != null)
-            {
-                // TODO 
+            if (playerType == PlayerType.MyPlayer) {
+                Application.LoadLevel("UIScreen");
             }
+            else if (controller != null) {
+                if (controller.LastFiredBy == PlayerType.MyPlayer) {
+                    ScoreManager.Instance.IncrementKills();
+                }
+            }
+
+            Destroy(gameObject);
         }
 
         public void Fire()
@@ -174,9 +187,14 @@ namespace UnityStandardAssets._2D
                     //CrossPlatformInputManager.GetAxis("Vertical"), 0f);
 
                 //Debug.Log("Firing in direction: " + direction + " from: " + transform.position);
-                arrows.First().Fire(transform.position, direction);
+                arrows.First().Fire(playerType, transform.position, direction);
                 arrows.RemoveAt(0);
             }
+        }
+
+        public void IncrementKills()
+        {
+            KillCount = KillCount + 1;
         }
     }
 }
