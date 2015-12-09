@@ -43,7 +43,7 @@ namespace UnityStandardAssets._2D
 
         private void Awake()
         {
-            if (playerType == PlayerType.MyClone && 
+            if ((playerType == PlayerType.MyClone || playerType == PlayerType.Bot) && 
                 (!PlayerPrefs.HasKey(playerType.ToString()) || 
                   PlayerPrefs.GetInt(playerType.ToString()) == 0))
             {
@@ -91,7 +91,7 @@ namespace UnityStandardAssets._2D
                 if (controller.IsLive && !WasJustFiredByMe(controller)) {
                     Debug.LogError("Character dead! " + gameObject.name);
                     KillPlayer(controller);
-                } else if(!controller.JustShot) {
+                } else if(!controller.JustShot && playerType == PlayerType.MyPlayer) {
                     Debug.Log("Pick up a arrow");
                     PickUp(controller);
                 }

@@ -44,7 +44,7 @@ namespace Firing
             gameObject.SetActive(true);
 
             Vector3 direction = targetDirection - startPosition;
-            transform.position += direction.normalized;
+            transform.position += Vector3.up;
             Debug.Log("Firing Dir: " + direction + " Normalized: " + direction.normalized);
             rigidbody2D.AddForce(direction.normalized * arrowSpeed, ForceMode2D.Impulse);
             StartCoroutine(MakeArrowLive());

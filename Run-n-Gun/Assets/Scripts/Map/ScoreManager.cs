@@ -7,6 +7,8 @@ public class ScoreManager : MonoBehaviour
     public PlatformerCharacter2D myPlayer;
     public Text arrowsLeft, kills;
 
+    public Button BackToHome;
+
     public static ScoreManager Instance;
 
     void Awake()
@@ -17,9 +19,16 @@ public class ScoreManager : MonoBehaviour
         }
 
         Instance = this;
+
+        BackToHome.onClick.AddListener(OnBackToHome);
     }
-	
-	// Update is called once per frame
+
+    private void OnBackToHome()
+    {
+        Application.LoadLevel("UIScreen");
+    }
+
+    // Update is called once per frame
 	void Update () {
         UpdateScore();
 	}
